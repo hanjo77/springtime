@@ -5,15 +5,14 @@ using System;
 public class CompleteCameraController : MonoBehaviour {
 
 	public GameObject player;       //Public variable to store a reference to the player game object
+	public GameBehaviour gameManager;
 	public float distance = 10;
 	public float heightOffset = 5;
 	public float focusHeight = 2;
 	public float sluggishness = .1f;
-	public AudioClip goalTune;
 
-	private PlayerBehaviour _playerBehaviour;
 	private Vector3 _focusOffset;
-	private AudioSource _audioSource;
+	private PlayerBehaviour _playerBehaviour;
 
 	// Use this for initialization
 	void Start () 
@@ -21,7 +20,6 @@ public class CompleteCameraController : MonoBehaviour {
 		//Calculate and store the offset value by getting the distance between the player's position and camera's position.
 		_playerBehaviour = player.GetComponent<PlayerBehaviour> ();
 		_focusOffset = new Vector3 (0, focusHeight, 0);
-		_audioSource = GetComponent<AudioSource>();
 	}
 
 	// LateUpdate is called after Update each frame
@@ -35,13 +33,8 @@ public class CompleteCameraController : MonoBehaviour {
 			jumpHeight = 0;
 		}
 
-		if (_playerBehaviour.IsFrontView ()) {
+		if (gameManager.IsFrontView ()) {
 			distanceVector *= -1;
-			if (_audioSource.loop) {
-				_audioSource.clip = goalTune;
-				_audioSource.loop = false;
-				_audioSource.Play ();
-			}
 		}
 		Vector3 targetPos = player.transform.position + distanceVector * 10;
 		targetPos.y = player.transform.position.y + heightOffset + Math.Abs(_playerBehaviour.GetJumpHeight());

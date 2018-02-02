@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -18,24 +20,45 @@ public class GameBehaviour : MonoBehaviour {
 	public GameObject recordingPanel;
 	public GameObject levelNamePanel;
 
+	public GameObject levelEndCanvas;
+	public GameObject hudCanvas;
+
+	public AudioSource backgroundAudioSource;
+	public AudioClip gameTune;
+	public AudioClip goalTune;
+	public Text scoreText;
+	public Text timeText;
 	public float titleFadeTime = 2.0f;
 	public float titleDisplayTime = 10.0f;
+	public float levelEndFadeTime = 2.0f;
+	public float levelEndDisplayTime = 10.0f;
+	public float edge = -5;
 
 	private int _level = 0;
 	private CanvasGroup _titleCanvasGroup;
 	private Text _levelNameText;
 	private float _titleFadeElapsedTime;
+	private CanvasGroup _levelEndCanvasGroup;
+	private CanvasGroup _hudCanvasGroup;
+	private Text _levelEndText;
+	private float _levelEndFadeElapsedTime;
+	private bool _showFrontView = false;
+	private DateTime _startTime;
+	private Int32 _coins;
+	private AudioSource _audioSource;
+	private DateTime _pauseStart;
+	private bool _levelIsLoading;
 
 	// Use this for initialization
 	void Start () {
 		_titleCanvasGroup = levelNamePanel.GetComponent<CanvasGroup> ();
-		_levelNameText = levelNamePanel.GetComponentInChildren<Text> ();
+		_levelEndCanvasGroup = levelEndCanvas.GetComponent<CanvasGroup> ();
+		_hudCanvasGroup = hudCanvas.GetComponent<CanvasGroup> ();
+		_audioSource = GetComponent<AudioSource> ();
+		Screen.sleepTimeout = SleepTimeout.NeverSleep;
 
 		if (levels.Count > 0) {
-			TextAsset levelText = levels [_level];
-			Level.Load (levelText, player, floor, coin, goal);
-			_levelNameText.text = levelText.name;
-			StartCoroutine (ShowTitle ());
+			LoadLevel ();
 		} else {
 			#if UNITY_EDITOR
 			recordingPanel.SetActive (true);
@@ -44,12 +67,100 @@ public class GameBehaviour : MonoBehaviour {
 	}
 
 	// Update is called once per frame
-	void Update () {
-		
+	void FixedUpdate () {
+		if (scoreText && timeText) {
+			scoreText.text = _coins.ToString ();
+			TimeSpan timeElapsed = DateTime.Now - _startTime;
+			timeText.text = string.Format("{0:00}:{1:00}", timeElapsed.Minutes, timeElapsed.Seconds);
+		}
+	}
+
+	public void LoadLevel() {
+		PlayBackgroundMusic (gameTune, true);
+		hudCanvas.SetActive (true);
+		_showFrontView = false;
+		_levelNameText = levelNamePanel.GetComponentInChildren<Text> ();
+		_startTime = DateTime.Now;
+		TextAsset levelText = levels [_level];
+		Level.Load (levelText, player, floor, coin, goal);
+		_levelNameText.text = levelText.name;
+		StartCoroutine (ShowTitle ());
+	}
+
+	public void Pause() {
+		_pauseStart = DateTime.Now;
+	}
+
+	public void Play() {
+		TimeSpan pauseTime = DateTime.Now - _pauseStart;
+		_startTime += pauseTime;
+	}
+
+	public void PlayAudioClip(AudioClip audioClip) {
+		_audioSource.clip = audioClip;
+		_audioSource.Play ();
+	}
+
+	public void PlayBackgroundMusic(AudioClip audioClip, bool loop) {
+		backgroundAudioSource.clip = audioClip;
+		backgroundAudioSource.loop = loop;
+		backgroundAudioSource.Play ();
+	}
+
+	public void SetFrontView(bool showFrontView) {
+		_showFrontView = showFrontView;
+	}
+
+	public void LoadScene(string sceneName) {
+		SceneManager.LoadScene (sceneName, LoadSceneMode.Single);
+	}
+
+	public void EnterGoal() {
+		_showFrontView = true;
+		StartCoroutine(EndLevel ());
+	}
+
+	public void AddCoin() {
+		_coins++;
+	}
+
+	public bool IsFrontView() {
+		return _showFrontView;
+	}
+
+	IEnumerator EndLevel() {
+		if (!_levelIsLoading) {
+			_levelIsLoading = true;
+			_levelEndFadeElapsedTime = 0;
+			_level++;
+			hudCanvas.SetActive (false);
+			PlayBackgroundMusic (goalTune, false);
+			while (_levelEndCanvasGroup.alpha < 1) {
+				_levelEndFadeElapsedTime += Time.deltaTime;
+				_levelEndCanvasGroup.alpha = Mathf.Clamp01 (_levelEndFadeElapsedTime / levelEndFadeTime);
+				yield return null;
+			}
+			yield return new WaitForSeconds (levelEndDisplayTime);
+			StartCoroutine (FadeOut (_levelEndCanvasGroup));
+			if (levels.Count > _level) {
+				_levelEndFadeElapsedTime = 0;
+				while (_levelEndCanvasGroup.alpha > 0) {
+					_levelEndFadeElapsedTime += Time.deltaTime;
+					_levelEndCanvasGroup.alpha = Mathf.Clamp01 (1.0f - (_levelEndFadeElapsedTime / levelEndFadeTime));
+					yield return null;
+				}
+				LoadLevel ();
+			} else {
+				SceneManager.LoadScene ("title", LoadSceneMode.Single);
+			}
+			_levelIsLoading = false;
+			yield return null;
+		}
 	}
 
 	IEnumerator ShowTitle()
 	{
+		_titleFadeElapsedTime = 0;
 		while(_titleCanvasGroup.alpha < 1)
 		{
 			_titleFadeElapsedTime += Time.deltaTime;

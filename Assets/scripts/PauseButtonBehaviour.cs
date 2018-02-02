@@ -3,16 +3,16 @@ using UnityEngine.SceneManagement;
 
 public class PauseButtonBehaviour : ButtonBehaviour {
 
-	public PlayerBehaviour player;
+	public GameBehaviour gameManager;
 
 	protected override void Activate() {
-		player.Pause ();
+		gameManager.Pause ();
 		Time.timeScale = 0;
 		base.Activate();
 	}
 
 	protected override void Deactivate() {
-		player.Play ();
+		gameManager.Play ();
 		Time.timeScale = 1;
 		base.Deactivate();
 	}
