@@ -17,7 +17,6 @@ public class MuteButtonBehaviour : ButtonBehaviour {
 		PlayerPrefs.SetInt ("muteSound", 1);
 		AudioListener.pause = true;
 		base.Activate();
-		Debug.Log ("test");
 	}
 
 	protected override void Deactivate() {

@@ -8,9 +8,6 @@ using UnityEngine.EventSystems;
 public class TitleBehaviour : MonoBehaviour {
 
 	public GameObject playButton;
-	public Sprite muteSprite;
-	public Sprite audioSprite;
-	public AudioListener audioListener;
 
 	private Image _muteButtonImage;
 

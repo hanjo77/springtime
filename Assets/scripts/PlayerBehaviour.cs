@@ -20,6 +20,7 @@ public class PlayerBehaviour : MonoBehaviour {
 	public float sluggishness = .1f;
 	public float slowDown = .2f;
 	public float gravity = -10;
+	public int lives = 5;
 
 	public AudioClip jumpSound;
 	public AudioClip coinSound;
@@ -31,6 +32,7 @@ public class PlayerBehaviour : MonoBehaviour {
 	private Vector3 _startPosition;
 	private bool _doJump;
 	private long _lastJumpTime;
+	private Vector3 _lastPosition;
 	private float _speed = 0;
 	private float _floorHeight = 0;
 	private Vector3 _targetPosition = Vector3.zero;
@@ -43,6 +45,7 @@ public class PlayerBehaviour : MonoBehaviour {
 			_otherLight = Instantiate(lightSource, new Vector3(0, .5f, 0), Quaternion.identity);
 			_startPosition = transform.position;
 		}
+		gameManager.livesText.text = "" + lives;
 		_defaultAcceleration = Input.acceleration;
 	}
 
@@ -85,7 +88,19 @@ public class PlayerBehaviour : MonoBehaviour {
 			transform.position = _startPosition;
 			_rigidbody.velocity = Vector3.zero;
 			_rigidbody.ResetInertiaTensor ();
+			ReduceLive();
+		}
+	}
+
+	void ReduceLive() {
+		lives--;
+		if (lives < 0) {
 			gameManager.LoadScene ("title");
+		}
+		else {
+			Reset ();
+			gameManager.livesText.text = "" + lives;
+			transform.position = _lastPosition + new Vector3 (0, 30, 0);
 		}
 	}
 
@@ -104,6 +119,7 @@ public class PlayerBehaviour : MonoBehaviour {
 		if (DateTime.Now.Ticks - _lastJumpTime > 1000000) {
 			_doJump = true;
 			_lastJumpTime = DateTime.Now.Ticks;
+			_lastPosition = transform.position;
 
 			_speed *= 1 - slowDown;
 			_speed -= ((Input.GetAxis ("Vertical") * motionForce) - ((Input.acceleration.z - _defaultAcceleration.x) * acceleratorForce));
@@ -127,7 +143,8 @@ public class PlayerBehaviour : MonoBehaviour {
 	}
 
 	public void Reset() {
-		_motion = new Vector3 (0, 0, 0);
+		_speed = 0;
+		_motion = Vector3.zero;
 		_rigidbody.velocity = Vector3.zero;
 		_rigidbody.ResetInertiaTensor ();
 	}
