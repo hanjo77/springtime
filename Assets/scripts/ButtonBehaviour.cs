@@ -24,20 +24,21 @@ public class ButtonBehaviour : MonoBehaviour {
 	}
 		
 	protected virtual void ButtonClick(BaseEventData data) {
+		Debug.Log ("click");
 		if (_isActive) {
-			Activate ();
-		} else {
 			Deactivate ();
+		} else {
+			Activate ();
 		}
 	}
 
 	protected virtual void Activate() {
 		_buttonImage.sprite = activeSprite;
-		_isActive = false;
+		_isActive = true;
 	}
 
 	protected virtual void Deactivate() {
 		_buttonImage.sprite = inactiveSprite;
-		_isActive = true;
+		_isActive = false;
 	}
 }

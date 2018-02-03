@@ -23,6 +23,8 @@ public class Level
 {  
 	public List<Item> players;
 	public List<Item> floors;
+	public List<Item> corners;
+	public List<Item> innerCorners;
 	public List<Item> coins;
 	public List<Item> goals;
 
@@ -30,7 +32,7 @@ public class Level
 	public Level() {
 	}
 
-	public static void Load(TextAsset textAsset, GameObject player, GameObject floor, GameObject coin, GameObject goal)
+	public static void Load(TextAsset textAsset, GameObject player, GameObject floor, GameObject corner, GameObject innerCorner, GameObject coin, GameObject goal)
 	{
 		Level level = JsonUtility.FromJson<Level>(textAsset.text);
 		Item playerItem = level.players[0];
@@ -38,9 +40,13 @@ public class Level
 		player.transform.rotation = playerItem.rotation;
 
 		level.DestroyGameObjectsByTag ("Floor");
+		level.DestroyGameObjectsByTag ("Corner");
+		level.DestroyGameObjectsByTag ("InnerCorner");
 		level.DestroyGameObjectsByTag ("Coin");
 		level.DestroyGameObjectsByTag ("Goal");
 		level.PlaceGameObjects (floor, level.floors);
+		level.PlaceGameObjects (corner, level.corners);
+		level.PlaceGameObjects (innerCorner, level.innerCorners);
 		level.PlaceGameObjects (coin, level.coins);
 		level.PlaceGameObjects (goal, level.goals);
 	}
@@ -49,6 +55,8 @@ public class Level
 		Level level = new Level ();
 		level.players = level.ItemObjectsByTag ("Player");
 		level.floors = level.ItemObjectsByTag ("Floor");
+		level.corners = level.ItemObjectsByTag ("Corner");
+		level.innerCorners = level.ItemObjectsByTag ("InnerCorner");
 		level.coins = level.ItemObjectsByTag ("Coin");
 		level.goals = level.ItemObjectsByTag ("Goal");
 		level.Write (levelName, JsonUtility.ToJson (level));

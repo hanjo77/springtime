@@ -14,6 +14,8 @@ public class GameBehaviour : MonoBehaviour {
 
 	public GameObject player;
 	public GameObject floor;
+	public GameObject corner;
+	public GameObject innerCorner;
 	public GameObject coin;
 	public GameObject goal;
 
@@ -30,16 +32,18 @@ public class GameBehaviour : MonoBehaviour {
 	public Text timeText;
 	public float titleFadeTime = 2.0f;
 	public float titleDisplayTime = 10.0f;
+	public string levelEndMessage = "well done!";
+	public string completeMessage = "thank you for playing!";
 	public float levelEndFadeTime = 2.0f;
 	public float levelEndDisplayTime = 10.0f;
 	public float edge = -5;
+	public CanvasGroup configCanvasGroup;
 
 	private int _level = 0;
 	private CanvasGroup _titleCanvasGroup;
 	private Text _levelNameText;
 	private float _titleFadeElapsedTime;
 	private CanvasGroup _levelEndCanvasGroup;
-	private CanvasGroup _hudCanvasGroup;
 	private Text _levelEndText;
 	private float _levelEndFadeElapsedTime;
 	private bool _showFrontView = false;
@@ -53,8 +57,10 @@ public class GameBehaviour : MonoBehaviour {
 	void Start () {
 		_titleCanvasGroup = levelNamePanel.GetComponent<CanvasGroup> ();
 		_levelEndCanvasGroup = levelEndCanvas.GetComponent<CanvasGroup> ();
-		_hudCanvasGroup = hudCanvas.GetComponent<CanvasGroup> ();
 		_audioSource = GetComponent<AudioSource> ();
+		_startTime = DateTime.Now;
+		_levelEndText = levelEndCanvas.GetComponentInChildren<Text> ();
+
 		Screen.sleepTimeout = SleepTimeout.NeverSleep;
 
 		if (levels.Count > 0) {
@@ -82,9 +88,10 @@ public class GameBehaviour : MonoBehaviour {
 		_levelNameText = levelNamePanel.GetComponentInChildren<Text> ();
 		_startTime = DateTime.Now;
 		TextAsset levelText = levels [_level];
-		Level.Load (levelText, player, floor, coin, goal);
+		Level.Load (levelText, player, floor, corner, innerCorner, coin, goal);
 		_levelNameText.text = levelText.name;
 		StartCoroutine (ShowTitle ());
+		StartCoroutine (FadeIn (configCanvasGroup));
 	}
 
 	public void Pause() {
@@ -133,11 +140,17 @@ public class GameBehaviour : MonoBehaviour {
 			_levelIsLoading = true;
 			_levelEndFadeElapsedTime = 0;
 			_level++;
+			if (levels.Count > _level) {
+				_levelEndText.text = levelEndMessage;
+			} else {
+				_levelEndText.text = completeMessage;
+			}
 			hudCanvas.SetActive (false);
 			PlayBackgroundMusic (goalTune, false);
 			while (_levelEndCanvasGroup.alpha < 1) {
 				_levelEndFadeElapsedTime += Time.deltaTime;
 				_levelEndCanvasGroup.alpha = Mathf.Clamp01 (_levelEndFadeElapsedTime / levelEndFadeTime);
+				configCanvasGroup.alpha = Mathf.Clamp01 (1.0f - (_levelEndFadeElapsedTime / levelEndFadeTime));
 				yield return null;
 			}
 			yield return new WaitForSeconds (levelEndDisplayTime);
