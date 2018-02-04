@@ -36,7 +36,14 @@ public class Level
 	{
 		Level level = JsonUtility.FromJson<Level>(textAsset.text);
 		Item playerItem = level.players[0];
-		player.transform.position = playerItem.position;
+		PlayerBehaviour playerBehaviour = player.GetComponent<PlayerBehaviour> ();
+		RaycastHit hit;
+		Vector3 down = new Vector3(0, -1, 0);
+		Vector3 playerPosition = new Vector3(playerItem.position.x, playerItem.position.y, playerItem.position.z);
+		if (Physics.Raycast (playerPosition, down, out hit, 10)) {
+			playerPosition.y = hit.point.y + playerBehaviour.startHeight;
+		}
+		player.transform.position = playerPosition;
 		player.transform.rotation = playerItem.rotation;
 
 		level.DestroyGameObjectsByTag ("Floor");

@@ -38,7 +38,12 @@ public class CompleteCameraController : MonoBehaviour {
 		}
 		Vector3 targetPos = player.transform.position + distanceVector * 10;
 		targetPos.y = player.transform.position.y + heightOffset + Math.Abs(_playerBehaviour.GetJumpHeight());
-		transform.position = Vector3.Lerp (transform.position, targetPos, sluggishness);
+		if (_playerBehaviour.isPlaying || gameManager.IsFrontView ()) {
+			transform.position = Vector3.Lerp (transform.position, targetPos, sluggishness);
+		} else {
+			transform.position = targetPos;
+			_playerBehaviour.isPlaying = true;
+		}
 		transform.LookAt (player.transform.position + _focusOffset);
 		// _camera.fieldOfView = (20000 / Screen.width) + 25;
 	}

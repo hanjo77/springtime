@@ -53,14 +53,15 @@ public class GameBehaviour : MonoBehaviour {
 	private AudioSource _audioSource;
 	private DateTime _pauseStart;
 	private bool _levelIsLoading;
+	private PlayerBehaviour _playerBehaviour;
 
 	// Use this for initialization
 	void Start () {
 		_titleCanvasGroup = levelNamePanel.GetComponent<CanvasGroup> ();
 		_levelEndCanvasGroup = levelEndCanvas.GetComponent<CanvasGroup> ();
 		_audioSource = GetComponent<AudioSource> ();
-		_startTime = DateTime.Now;
 		_levelEndText = levelEndCanvas.GetComponentInChildren<Text> ();
+		_playerBehaviour = player.GetComponent<PlayerBehaviour> ();
 
 		Screen.sleepTimeout = SleepTimeout.NeverSleep;
 
@@ -75,6 +76,9 @@ public class GameBehaviour : MonoBehaviour {
 
 	// Update is called once per frame
 	void FixedUpdate () {
+		if (_playerBehaviour.GetLastPosition() == Vector3.zero) {
+			_startTime = DateTime.Now;
+		}
 		if (scoreText && timeText) {
 			scoreText.text = _coins.ToString ();
 			TimeSpan timeElapsed = DateTime.Now - _startTime;

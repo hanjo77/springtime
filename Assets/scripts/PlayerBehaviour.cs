@@ -21,6 +21,9 @@ public class PlayerBehaviour : MonoBehaviour {
 	public float slowDown = .2f;
 	public float gravity = -10;
 	public int lives = 5;
+	public float startHeight = 100;
+	public bool isPlaying;
+	public float setbackBorderOffset = 2.5f;
 
 	public AudioClip jumpSound;
 	public AudioClip coinSound;
@@ -37,6 +40,7 @@ public class PlayerBehaviour : MonoBehaviour {
 	private float _floorHeight = 0;
 	private Vector3 _targetPosition = Vector3.zero;
 	private Vector3 _defaultAcceleration;
+	private bool _setLastPosition;
 
 	// Use this for initialization
 	void Start () {
@@ -45,8 +49,13 @@ public class PlayerBehaviour : MonoBehaviour {
 			_otherLight = Instantiate(lightSource, new Vector3(0, .5f, 0), Quaternion.identity);
 			_startPosition = transform.position;
 		}
-		gameManager.livesText.text = "" + lives;
+		if (gameManager != null) {
+			gameManager.livesText.text = "" + lives;
+		}
+		Transform t = transform;
+		transform.position = new Vector3(transform.position.x, startHeight, transform.position.z);
 		_defaultAcceleration = Input.acceleration;
+		isPlaying = false;
 	}
 
 	// Update is called once per frame
@@ -85,10 +94,16 @@ public class PlayerBehaviour : MonoBehaviour {
 		}
 			
 		if (gameManager != null && transform.position.y < gameManager.edge) {
-			transform.position = _startPosition;
 			_rigidbody.velocity = Vector3.zero;
 			_rigidbody.ResetInertiaTensor ();
 			ReduceLive();
+		}
+
+		RaycastHit hit;
+		Vector3 down = new Vector3(0, -1, 0);
+		if (_setLastPosition && Physics.Raycast (transform.position, down, out hit, 10)) {
+			_lastPosition = new Vector3(transform.position.x, hit.point.y + startHeight, transform.position.z);
+			_setLastPosition = false;
 		}
 	}
 
@@ -100,7 +115,7 @@ public class PlayerBehaviour : MonoBehaviour {
 		else {
 			Reset ();
 			gameManager.livesText.text = "" + lives;
-			transform.position = _lastPosition + new Vector3 (0, 30, 0);
+			transform.position = _lastPosition;
 		}
 	}
 
@@ -119,7 +134,8 @@ public class PlayerBehaviour : MonoBehaviour {
 		if (DateTime.Now.Ticks - _lastJumpTime > 1000000) {
 			_doJump = true;
 			_lastJumpTime = DateTime.Now.Ticks;
-			_lastPosition = transform.position;
+
+			_setLastPosition = true;
 
 			_speed *= 1 - slowDown;
 			_speed -= ((Input.GetAxis ("Vertical") * motionForce) - ((Input.acceleration.z - _defaultAcceleration.x) * acceleratorForce));
@@ -136,7 +152,11 @@ public class PlayerBehaviour : MonoBehaviour {
 		}
 
 		if (collisionInfo.gameObject.tag.Equals ("Goal")) {
+			isPlaying = false;
 			_targetPosition = collisionInfo.gameObject.transform.position;
+			_lastPosition = Vector3.zero;
+			_setLastPosition = false;
+			_doJump = false;
 			Reset ();
 			gameManager.EnterGoal ();
 		}
@@ -151,5 +171,9 @@ public class PlayerBehaviour : MonoBehaviour {
 
 	public float GetJumpHeight() {
 		return transform.position.y - _floorHeight;
+	}
+
+	public Vector3 GetLastPosition() {
+		return _lastPosition;
 	}
 }
