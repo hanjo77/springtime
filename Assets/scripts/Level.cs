@@ -45,6 +45,7 @@ public class Level
 		}
 		player.transform.position = playerPosition;
 		player.transform.rotation = playerItem.rotation;
+		playerBehaviour.isPlaying = false;
 
 		level.DestroyGameObjectsByTag ("Floor");
 		level.DestroyGameObjectsByTag ("Corner");

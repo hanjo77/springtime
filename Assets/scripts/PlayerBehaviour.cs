@@ -30,9 +30,7 @@ public class PlayerBehaviour : MonoBehaviour {
 
 	private Vector2 _motion = new Vector2 (0, 0);
 	private Rigidbody _rigidbody;
-	private GameObject _otherLight;
 	private Quaternion _playerRotation;
-	private Vector3 _startPosition;
 	private bool _doJump;
 	private long _lastJumpTime;
 	private Vector3 _lastPosition;
@@ -46,13 +44,10 @@ public class PlayerBehaviour : MonoBehaviour {
 	void Start () {
 		if (lightSource) {
 			_rigidbody = GetComponent<Rigidbody> ();
-			_otherLight = Instantiate(lightSource, new Vector3(0, .5f, 0), Quaternion.identity);
-			_startPosition = transform.position;
 		}
 		if (gameManager != null) {
 			gameManager.livesText.text = "" + lives;
 		}
-		Transform t = transform;
 		transform.position = new Vector3(transform.position.x, startHeight, transform.position.z);
 		_defaultAcceleration = Input.acceleration;
 		isPlaying = false;
@@ -82,17 +77,7 @@ public class PlayerBehaviour : MonoBehaviour {
 		}
 
 		transform.rotation *= Quaternion.AngleAxis ((Input.GetAxis ("Horizontal") * rotationSpeed) + ((Input.acceleration.x - _defaultAcceleration.x) * acceleratorRotationSpeed), Vector3.up);
-
-		if (_otherLight) {
-			Vector3 offset = transform.forward * lightDistance;
-			if (gameManager != null && gameManager.IsFrontView()) {
-				offset = new Vector3(-offset.x, 0, -offset.z);
-			}
-
-			_otherLight.transform.position = transform.position + offset + new Vector3 (0, 2 * lightHeight, 0);
-			_otherLight.transform.LookAt (this.transform.position + new Vector3 (0, lightHeight, 0));
-		}
-			
+					
 		if (gameManager != null && transform.position.y < gameManager.edge) {
 			_rigidbody.velocity = Vector3.zero;
 			_rigidbody.ResetInertiaTensor ();
@@ -156,6 +141,7 @@ public class PlayerBehaviour : MonoBehaviour {
 			_targetPosition = collisionInfo.gameObject.transform.position;
 			_lastPosition = Vector3.zero;
 			_setLastPosition = false;
+			// _otherLight = Instantiate(lightSource, new Vector3(0, .5f, 0), Quaternion.identity);
 			_doJump = false;
 			Reset ();
 			gameManager.EnterGoal ();
