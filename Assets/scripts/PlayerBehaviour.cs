@@ -49,7 +49,7 @@ public class PlayerBehaviour : MonoBehaviour {
 			gameManager.livesText.text = "" + lives;
 		}
 		transform.position = new Vector3(transform.position.x, startHeight, transform.position.z);
-		_defaultAcceleration = Input.acceleration;
+		ResetAccelerator ();
 		isPlaying = false;
 	}
 
@@ -123,7 +123,7 @@ public class PlayerBehaviour : MonoBehaviour {
 			_setLastPosition = true;
 
 			_speed *= 1 - slowDown;
-			_speed -= ((Input.GetAxis ("Vertical") * motionForce) - ((Input.acceleration.z - _defaultAcceleration.x) * acceleratorForce));
+			_speed -= ((Input.GetAxis ("Vertical") * motionForce) - ((Input.acceleration.z - _defaultAcceleration.z) * acceleratorForce));
 
 			if (Math.Abs (_speed) > maxSpeed) {
 				_speed = (_speed / Math.Abs (_speed)) * maxSpeed;
@@ -153,6 +153,10 @@ public class PlayerBehaviour : MonoBehaviour {
 		_motion = Vector3.zero;
 		_rigidbody.velocity = Vector3.zero;
 		_rigidbody.ResetInertiaTensor ();
+	}
+
+	public void ResetAccelerator() {
+		_defaultAcceleration = Input.acceleration;
 	}
 
 	public float GetJumpHeight() {

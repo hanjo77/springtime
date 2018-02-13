@@ -1,29 +1,18 @@
 fileFormatVersion: 2
-guid: 0aea2ab12b5b04d86bcb686a7e8bd5f1
-timeCreated: 1516552754
+guid: 2445134a734bf473ab0c1d1db9a8379b
+timeCreated: 1518555411
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
-    100000: Camera
-    100002: //RootNode
-    100004: Cylinder
-    100006: Lamp
-    400000: Camera
-    400002: //RootNode
-    400004: Cylinder
-    400006: Lamp
-    2000000: Camera
-    2100000: Material.001
-    2300000: Cylinder
-    2300002: //RootNode
-    3300000: Cylinder
-    3300002: //RootNode
-    4300000: Cylinder
-    7400000: CylinderAction
-    7400002: Cylinder|CylinderAction
+    100000: //RootNode
+    400000: //RootNode
+    2100000: Material_001__goal_png
+    2300000: //RootNode
+    3300000: //RootNode
+    4300000: Plane
+    7400000: Default Take
     9500000: //RootNode
-    10800000: Lamp
   externalObjects: {}
   materials:
     importMaterials: 1

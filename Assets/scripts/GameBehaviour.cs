@@ -15,7 +15,7 @@ public class GameBehaviour : MonoBehaviour {
 	public GameObject player;
 	public GameObject floor;
 	public GameObject corner;
-	public GameObject innerCorner;
+	public GameObject otherCorner;
 	public GameObject coin;
 	public GameObject goal;
 
@@ -69,6 +69,7 @@ public class GameBehaviour : MonoBehaviour {
 			LoadLevel ();
 		} else {
 			#if UNITY_EDITOR
+			configCanvas.SetActive (true);
 			recordingPanel.SetActive (true);
 			#endif
 		}
@@ -94,7 +95,7 @@ public class GameBehaviour : MonoBehaviour {
 		_levelNameText = levelNamePanel.GetComponentInChildren<Text> ();
 		_startTime = DateTime.Now;
 		TextAsset levelText = levels [_level];
-		Level.Load (levelText, player, floor, corner, innerCorner, coin, goal);
+		Level.Load (levelText, player, floor, corner, otherCorner, coin, goal);
 		_levelNameText.text = levelText.name;
 		StartCoroutine (ShowTitle ());
 	}
@@ -106,6 +107,7 @@ public class GameBehaviour : MonoBehaviour {
 	public void Play() {
 		TimeSpan pauseTime = DateTime.Now - _pauseStart;
 		_startTime += pauseTime;
+		_playerBehaviour.ResetAccelerator ();
 	}
 
 	public void PlayAudioClip(AudioClip audioClip) {
