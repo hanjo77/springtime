@@ -120,7 +120,14 @@ public class PlayerBehaviour : MonoBehaviour {
 			_doJump = true;
 			_lastJumpTime = DateTime.Now.Ticks;
 
-			_setLastPosition = true;
+			FloorBehaviour floor = null;
+			if (collisionInfo.gameObject.transform.parent) {
+				floor = collisionInfo.gameObject.transform.parent.gameObject.GetComponent<FloorBehaviour> ();
+			}
+
+			if (floor == null || !(floor.doTranslate || floor.doRotate)) {
+				_setLastPosition = true;
+			}
 
 			_speed *= 1 - slowDown;
 			_speed -= ((Input.GetAxis ("Vertical") * motionForce) - ((Input.acceleration.z - _defaultAcceleration.z) * acceleratorForce));
@@ -136,7 +143,7 @@ public class PlayerBehaviour : MonoBehaviour {
 			}
 		}
 
-		if (collisionInfo.gameObject.tag.Equals ("Goal")) {
+		if (collisionInfo.transform.parent.gameObject.tag.Equals ("Goal")) {
 			isPlaying = false;
 			_targetPosition = collisionInfo.gameObject.transform.position;
 			_lastPosition = Vector3.zero;

@@ -56,7 +56,13 @@ public class TextureResize : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
-		if (transform.hasChanged && Application.isEditor && !Application.isPlaying) 
+		if (!Application.isEditor || Application.isPlaying) {
+			Debug.Log ("test");
+			TextureResize current = GetComponent<TextureResize> ();
+			current.enabled = false;
+			Destroy (current);
+		}
+		else if (Application.isEditor && transform.hasChanged) 
 		{
 			Debug.Log("The transform has changed!");
 			transform.hasChanged = false;
