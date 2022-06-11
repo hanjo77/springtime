@@ -1,73 +1,194 @@
 fileFormatVersion: 2
 guid: da77aa8f8fe86482a92c5dec4e88adee
-timeCreated: 1516653622
-licenseType: Free
 ModelImporter:
-  serializedVersion: 22
-  fileIDToRecycleName:
-    100000: //RootNode
-    100002: Cube
-    100004: Cube_001
-    100006: Cylinder
-    100008: Cylinder_002
-    100010: Cylinder_003
-    100012: Cylinder_004
-    100014: Cylinder_005
-    100016: Cylinder_006
-    100018: Sphere
-    100020: Torus
-    400000: //RootNode
-    400002: Cube
-    400004: Cube_001
-    400006: Cylinder
-    400008: Cylinder_002
-    400010: Cylinder_003
-    400012: Cylinder_004
-    400014: Cylinder_005
-    400016: Cylinder_006
-    400018: Sphere
-    400020: Torus
-    2100000: Material_002
-    2100002: Material_003
-    2100004: Material_004
-    2100006: Material_005
-    2100008: Material_006
-    2100010: Material_007
-    2300000: Cube
-    2300002: Cube_001
-    2300004: Cylinder
-    2300006: Cylinder_002
-    2300008: Cylinder_003
-    2300010: Cylinder_004
-    2300012: Cylinder_005
-    2300014: Cylinder_006
-    2300016: Sphere
-    2300018: Torus
-    3300000: Cube
-    3300002: Cube_001
-    3300004: Cylinder
-    3300006: Cylinder_002
-    3300008: Cylinder_003
-    3300010: Cylinder_004
-    3300012: Cylinder_005
-    3300014: Cylinder_006
-    3300016: Sphere
-    3300018: Torus
-    4300000: Torus
-    4300002: Sphere
-    4300004: Cube
-    4300006: Cylinder
-    4300008: Cube_001
-    4300010: Cylinder_002
-    4300012: Cylinder_003
-    4300014: Cylinder_004
-    4300016: Cylinder_005
-    4300018: Cylinder_006
-    7400000: Default Take
-    9500000: //RootNode
+  serializedVersion: 21202
+  internalIDToNameTable:
+  - first:
+      1: 100000
+    second: //RootNode
+  - first:
+      1: 100002
+    second: Cube
+  - first:
+      1: 100004
+    second: Cube_001
+  - first:
+      1: 100006
+    second: Cylinder
+  - first:
+      1: 100008
+    second: Cylinder_002
+  - first:
+      1: 100010
+    second: Cylinder_003
+  - first:
+      1: 100012
+    second: Cylinder_004
+  - first:
+      1: 100014
+    second: Cylinder_005
+  - first:
+      1: 100016
+    second: Cylinder_006
+  - first:
+      1: 100018
+    second: Sphere
+  - first:
+      1: 100020
+    second: Torus
+  - first:
+      4: 400000
+    second: //RootNode
+  - first:
+      4: 400002
+    second: Cube
+  - first:
+      4: 400004
+    second: Cube_001
+  - first:
+      4: 400006
+    second: Cylinder
+  - first:
+      4: 400008
+    second: Cylinder_002
+  - first:
+      4: 400010
+    second: Cylinder_003
+  - first:
+      4: 400012
+    second: Cylinder_004
+  - first:
+      4: 400014
+    second: Cylinder_005
+  - first:
+      4: 400016
+    second: Cylinder_006
+  - first:
+      4: 400018
+    second: Sphere
+  - first:
+      4: 400020
+    second: Torus
+  - first:
+      21: 2100000
+    second: Material_002
+  - first:
+      21: 2100002
+    second: Material_003
+  - first:
+      21: 2100004
+    second: Material_004
+  - first:
+      21: 2100006
+    second: Material_005
+  - first:
+      21: 2100008
+    second: Material_006
+  - first:
+      21: 2100010
+    second: Material_007
+  - first:
+      23: 2300000
+    second: Cube
+  - first:
+      23: 2300002
+    second: Cube_001
+  - first:
+      23: 2300004
+    second: Cylinder
+  - first:
+      23: 2300006
+    second: Cylinder_002
+  - first:
+      23: 2300008
+    second: Cylinder_003
+  - first:
+      23: 2300010
+    second: Cylinder_004
+  - first:
+      23: 2300012
+    second: Cylinder_005
+  - first:
+      23: 2300014
+    second: Cylinder_006
+  - first:
+      23: 2300016
+    second: Sphere
+  - first:
+      23: 2300018
+    second: Torus
+  - first:
+      33: 3300000
+    second: Cube
+  - first:
+      33: 3300002
+    second: Cube_001
+  - first:
+      33: 3300004
+    second: Cylinder
+  - first:
+      33: 3300006
+    second: Cylinder_002
+  - first:
+      33: 3300008
+    second: Cylinder_003
+  - first:
+      33: 3300010
+    second: Cylinder_004
+  - first:
+      33: 3300012
+    second: Cylinder_005
+  - first:
+      33: 3300014
+    second: Cylinder_006
+  - first:
+      33: 3300016
+    second: Sphere
+  - first:
+      33: 3300018
+    second: Torus
+  - first:
+      43: 4300000
+    second: Torus
+  - first:
+      43: 4300002
+    second: Sphere
+  - first:
+      43: 4300004
+    second: Cube
+  - first:
+      43: 4300006
+    second: Cylinder
+  - first:
+      43: 4300008
+    second: Cube_001
+  - first:
+      43: 4300010
+    second: Cylinder_002
+  - first:
+      43: 4300012
+    second: Cylinder_003
+  - first:
+      43: 4300014
+    second: Cylinder_004
+  - first:
+      43: 4300016
+    second: Cylinder_005
+  - first:
+      43: 4300018
+    second: Cylinder_006
+  - first:
+      74: 7400000
+    second: Default Take
+  - first:
+      95: 9500000
+    second: //RootNode
+  - first:
+      74: -623603649343465320
+    second: Scene
   externalObjects: {}
   materials:
-    importMaterials: 1
+    materialImportMode: 1
     materialName: 0
     materialSearch: 1
     materialLocation: 1
@@ -76,6 +197,7 @@ ModelImporter:
     bakeSimulation: 0
     resampleCurves: 1
     optimizeGameObjects: 0
+    removeConstantScaleCurves: 0
     motionNodeName: 
     rigImportErrors: 
     rigImportWarnings: 
@@ -84,6 +206,7 @@ ModelImporter:
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
+    importConstraints: 0
     animationCompression: 1
     animationRotationError: 0.5
     animationPositionError: 0.5
@@ -98,21 +221,33 @@ ModelImporter:
     globalScale: 1
     meshCompression: 0
     addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1
     importLights: 1
+    nodeNameCollisionStrategy: 0
+    fileIdsGeneration: 1
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
-    optimizeMeshForGPU: 1
     keepQuads: 0
     weldVertices: 1
+    bakeAxisConversion: 0
     preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    optimizeBones: 1
+    meshOptimizationFlags: -1
     indexFormat: 0
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 0
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
     secondaryUVPackMargin: 4
     useFileScale: 1
   tangentSpace:
@@ -120,10 +255,13 @@ ModelImporter:
     normalImportMode: 0
     tangentImportMode: 3
     normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 1
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
   importAnimation: 1
-  copyAvatar: 0
   humanDescription:
-    serializedVersion: 2
+    serializedVersion: 3
     human: []
     skeleton: []
     armTwist: 0.5
@@ -133,14 +271,17 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
+    globalScale: 1
     rootMotionBoneName: 
-    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 2
   humanoidOversampling: 1
+  avatarSetup: 1
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 0
   additionalBone: 0
   userData: 
   assetBundleName: 

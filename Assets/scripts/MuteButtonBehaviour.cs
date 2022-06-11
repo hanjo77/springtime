@@ -5,7 +5,6 @@ public class MuteButtonBehaviour : ButtonBehaviour {
 
 	protected override void Start () {
 		base.Start ();
-		Debug.Log (PlayerPrefs.GetInt ("muteSound"));
 		if (PlayerPrefs.GetInt ("muteSound") > 0) {
 			Activate ();
 		} else {

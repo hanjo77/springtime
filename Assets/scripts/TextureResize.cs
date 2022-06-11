@@ -10,13 +10,12 @@ public class TextureResize : MonoBehaviour
 	public List<GameObject> faces;
 	public List<GameObject> sides;
 
-	private List<Material> surfaceMats;
-	private List<Material> faceMats;
-	private List<Material> sideMats;
+	private List<Material> surfaceMats = new List<Material> ();
+	private List<Material> faceMats = new List<Material> ();
+	private List<Material> sideMats = new List<Material> ();
 	// Use this for initialization
 	void Start () 
 	{
-		Debug.Log("Start");
 		surfaceMats = new List<Material> ();
 		faceMats = new List<Material> ();
 		sideMats = new List<Material> ();
@@ -33,7 +32,9 @@ public class TextureResize : MonoBehaviour
 		}
 		if (surfaces.Count > 0) {
 			foreach (GameObject gameObject in surfaces) {
-				surfaceMats.Add (gameObject.GetComponent<Renderer> ().material);
+				if (gameObject != null) {
+					surfaceMats.Add (gameObject.GetComponent<Renderer> ().material);
+				}
 			}
 			if (surfaceMats.Count > 0) {
 				foreach (Material surface in surfaceMats) {
@@ -57,14 +58,12 @@ public class TextureResize : MonoBehaviour
 	void Update () 
 	{
 		if (!Application.isEditor || Application.isPlaying) {
-			Debug.Log ("test");
 			TextureResize current = GetComponent<TextureResize> ();
 			current.enabled = false;
 			Destroy (current);
 		}
 		else if (Application.isEditor && transform.hasChanged) 
 		{
-			Debug.Log("The transform has changed!");
 			transform.hasChanged = false;
 			if (sideMats.Count > 0) {
 				foreach (Material side in sideMats) {

@@ -133,9 +133,6 @@ public class Level
 				floorBehaviour.isInfiniteRotation = item.rotator.isInfinite;
 				floorBehaviour.doRotate = true;
 			} 
-			if (!item.hasTransition && !item.hasRotation) {
-				UnityEngine.Object.Destroy (floor);
-			}
 
 			PlaceGameObjects (floor, floors.AsEnumerable().Where(s => s.parentId == floorBehaviour.id), newObject);
 			PlaceGameObjects (corner, corners.AsEnumerable().Where(s => s.parentId == floorBehaviour.id), newObject);
@@ -204,7 +201,7 @@ public class Level
 		GameObject[] gameObjects = GameObject.FindGameObjectsWithTag (tag);
 		foreach (GameObject gameObject in gameObjects)
 		{
-			GameObject.Destroy(gameObject);
+			GameObject.DestroyImmediate(gameObject, true);
 		}
 	}
 
