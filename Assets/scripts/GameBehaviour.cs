@@ -97,6 +97,7 @@ public class GameBehaviour : MonoBehaviour {
 		TextAsset levelText = levels [_level];
 		Level.Load (levelText, player, floor, corner, otherCorner, coin, goal);
 		_levelNameText.text = levelText.name;
+		_playerBehaviour.ResetAccelerator();
 		StartCoroutine (ShowTitle ());
 	}
 

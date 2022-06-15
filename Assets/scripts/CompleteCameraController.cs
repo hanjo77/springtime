@@ -10,6 +10,8 @@ public class CompleteCameraController : MonoBehaviour {
 	public float heightOffset = 5;
 	public float focusHeight = 2;
 	public float sluggishness = .1f;
+	public int mobileFieldOfView = 100;
+	public int desktopFieldOfView = 60;
 
 	private Vector3 _focusOffset;
 	private PlayerBehaviour _playerBehaviour;
@@ -25,26 +27,33 @@ public class CompleteCameraController : MonoBehaviour {
 	// LateUpdate is called after Update each frame
 	void LateUpdate () 
 	{
-		// Set the position of the camera's transform to be the same as the player's, but offset by the calculated offset distance.
-		// transform.position = player.transform.position + offset;
-		float jumpHeight = _playerBehaviour.GetJumpHeight();
-		Vector3 distanceVector = player.transform.forward;
-		if (jumpHeight < 0) {
-			jumpHeight = 0;
-		}
-
-		if (gameManager.IsFrontView ()) {
-			distanceVector *= -1;
-		}
-		Vector3 targetPos = player.transform.position + distanceVector * 10;
-		targetPos.y = player.transform.position.y + heightOffset + Math.Abs(_playerBehaviour.GetJumpHeight());
-		if (_playerBehaviour.isPlaying || gameManager.IsFrontView ()) {
-			transform.position = Vector3.Lerp (transform.position, targetPos, sluggishness);
+		if (Screen.width < 900) {
+			GetComponent<Camera>().fieldOfView = mobileFieldOfView;
 		} else {
-			transform.position = targetPos;
-			_playerBehaviour.isPlaying = true;
+			GetComponent<Camera>().fieldOfView = desktopFieldOfView;
 		}
-		transform.LookAt (player.transform.position + _focusOffset);
-		// _camera.fieldOfView = (20000 / Screen.width) + 25;
+		if (_playerBehaviour) {
+			// Set the position of the camera's transform to be the same as the player's, but offset by the calculated offset distance.
+			// transform.position = player.transform.position + offset;
+			float jumpHeight = _playerBehaviour.GetJumpHeight();
+			Vector3 distanceVector = player.transform.forward;
+			if (jumpHeight < 0) {
+				jumpHeight = 0;
+			}
+
+			if (gameManager.IsFrontView ()) {
+				distanceVector *= -1;
+			}
+			Vector3 targetPos = player.transform.position + distanceVector * 10;
+			targetPos.y = player.transform.position.y + heightOffset + Math.Abs(_playerBehaviour.GetJumpHeight());
+			if (_playerBehaviour.isPlaying || gameManager.IsFrontView ()) {
+				transform.position = Vector3.Lerp (transform.position, targetPos, sluggishness);
+			} else {
+				transform.position = targetPos;
+				_playerBehaviour.isPlaying = true;
+			}
+			transform.LookAt (player.transform.position + _focusOffset);
+			// _camera.fieldOfView = (20000 / Screen.width) + 25;
+		}
 	}
 }

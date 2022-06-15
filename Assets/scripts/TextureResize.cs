@@ -22,7 +22,8 @@ public class TextureResize : MonoBehaviour
 
 		if (sides.Count > 0) {
 			foreach (GameObject gameObject in sides) {
-				sideMats.Add(gameObject.GetComponent<Renderer> ().material);
+				Renderer renderer = gameObject.GetComponent<Renderer> ();
+				sideMats.Add(renderer.material);
 			}
 			if (sideMats.Count > 0) {
 				foreach (Material side in sideMats) {

@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 using System;
+using System.Runtime.InteropServices;
 
 public class PlayerBehaviour : MonoBehaviour {
 
@@ -49,8 +51,37 @@ public class PlayerBehaviour : MonoBehaviour {
 			gameManager.livesText.text = "" + lives;
 		}
 		transform.position = new Vector3(transform.position.x, startHeight, transform.position.z);
-		ResetAccelerator ();
+		ResetAccelerator();
 		isPlaying = false;
+	}
+
+    protected void OnEnable()
+    {
+        // All sensors start out disabled so they have to manually be enabled first.
+		if (Accelerometer.current != null) {
+	        InputSystem.EnableDevice(Accelerometer.current);
+		}
+		ResetAccelerator ();
+    }
+
+    protected void OnDisable()
+    {
+		if (Accelerometer.current != null) {
+			InputSystem.DisableDevice(Accelerometer.current);
+		}
+    }
+
+	Vector3 Acceleration () {
+		Vector3 acceleration = new Vector3(0, 0, 0);
+		if (Accelerometer.current != null) {
+			Vector3 _acc = Accelerometer.current.acceleration.ReadValue();
+			acceleration = new Vector3(
+				(_acc.x - _defaultAcceleration.x) * acceleratorRotationSpeed,
+				(_defaultAcceleration.y - _acc.y) * acceleratorForce,
+				0
+			);
+		}
+		return acceleration;
 	}
 
 	// Update is called once per frame
@@ -76,7 +107,11 @@ public class PlayerBehaviour : MonoBehaviour {
 			Reset ();
 		}
 
-		transform.rotation *= Quaternion.AngleAxis ((Input.GetAxis ("Horizontal") * rotationSpeed) + ((Input.acceleration.x - _defaultAcceleration.x) * acceleratorRotationSpeed), Vector3.up);
+		PlayerInput _playerInput = GetComponent<PlayerInput>();
+		InputAction _horizontalAction = _playerInput.actions["Horizontal"];
+		float _horizontalValue = _horizontalAction.ReadValue<float>();
+
+		transform.rotation *= Quaternion.AngleAxis ((_horizontalValue * rotationSpeed) + Acceleration().x, Vector3.up);
 					
 		if (gameManager != null && transform.position.y < gameManager.edge) {
 			_rigidbody.velocity = Vector3.zero;
@@ -129,8 +164,12 @@ public class PlayerBehaviour : MonoBehaviour {
 				_setLastPosition = true;
 			}
 
+			PlayerInput _playerInput = GetComponent<PlayerInput>();
+            InputAction _verticalAction = _playerInput.actions["Vertical"];
+         	float _verticalValue = _verticalAction.ReadValue<float>() * -1;
+
 			_speed *= 1 - slowDown;
-			_speed -= ((Input.GetAxis ("Vertical") * motionForce) - ((Input.acceleration.z - _defaultAcceleration.z) * acceleratorForce));
+			_speed -= ((_verticalValue * motionForce) - Acceleration().y);
 
 			if (Math.Abs (_speed) > maxSpeed) {
 				_speed = (_speed / Math.Abs (_speed)) * maxSpeed;
@@ -160,6 +199,7 @@ public class PlayerBehaviour : MonoBehaviour {
 		_motion = Vector3.zero;
 		_rigidbody.velocity = Vector3.zero;
 		_rigidbody.ResetInertiaTensor ();
+		ResetAccelerator();
 	}
 
 	public void ResetAccelerator() {
@@ -173,4 +213,5 @@ public class PlayerBehaviour : MonoBehaviour {
 	public Vector3 GetLastPosition() {
 		return _lastPosition;
 	}
+
 }
