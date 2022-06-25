@@ -1,21 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class PlayButtonBehaviour : MonoBehaviour {
+public class PlayButtonBehaviour : ButtonBehaviour {
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+	protected override void Activate() {
+		SceneManager.LoadScene("game", LoadSceneMode.Single);
+		base.Activate();
 	}
 
-	void TaskOnClick()
-	{
-		Debug.Log("You have clicked the button!");
+	protected override void Deactivate() {
+		SceneManager.LoadScene("game", LoadSceneMode.Single);
+		base.Deactivate();
 	}
 }

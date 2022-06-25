@@ -57,10 +57,15 @@ public class PlayerBehaviour : MonoBehaviour {
 
     protected void OnEnable()
     {
-        // All sensors start out disabled so they have to manually be enabled first.
-		if (Accelerometer.current != null) {
-	        InputSystem.EnableDevice(Accelerometer.current);
+		try {
+			// All sensors start out disabled so they have to manually be enabled first.
+			if (Accelerometer.current != null) {
+				InputSystem.EnableDevice(Accelerometer.current);
+			}
+		} catch (Exception e) {
+			Debug.Log(e.Message);
 		}
+
 		ResetAccelerator ();
     }
 

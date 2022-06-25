@@ -1,5 +1,5 @@
 
 
 public class GlobalConfig {
-    public static float mobileBreakpoint = 900;
+    public static int mobileBreakpoint = 900;
 }
